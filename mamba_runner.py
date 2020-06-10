@@ -1,5 +1,6 @@
 import argparse
 
+from django.db import transaction, connections
 from django.test.utils import (
     setup_databases,
     setup_test_environment,
@@ -67,23 +68,89 @@ class MambaRunner:
 
         MambaRunner.add_mamba_arguments(parser)
         # Added this here due to a conflict with Django test parameters.
-        parser.add_argument('--no-color', default=False, action='store_true', help='turn off all output coloring (default: %(default)s)')
+        parser.add_argument(
+            '--no-color',
+            default=False,
+            action='store_true',
+            help='turn off all output coloring (default: %(default)s)'
+        )
 
         return parser.parse_known_args()[MAMBA_ARGUMENTS]
 
     @classmethod
     def add_mamba_arguments(cls, parser):
-        parser.add_argument('--mamba-version', '-mv', default=False, action='store_true', help='display the version',
-                            dest='version')
-        parser.add_argument('--slow', '-s', default=0.075, type=float, help='slow test threshold in seconds (default: %(default)s)')
-        parser.add_argument('--enable-coverage', default=False, action='store_true', help='enable code coverage measurement (default: %(default)s)')
-        parser.add_argument('--coverage-file', default='.coverage', action='store', help='name of coverage data file (default: %(default)s)')
-        parser.add_argument('--format', '-f', default='progress', action='store', help='output format (default: %(default)s)')
-        parser.add_argument('specs', default=['./spec', './specs'], nargs='*', help='paths to specs to run or directories with specs to run (default: %(default)s)')
-        parser.add_argument('--tags', '-t', default=None, type=lambda x: [tag.strip() for tag in x.split(',')], action='store', help='run examples with specified tags (example: -t unit,integration)')
+        parser.add_argument(
+            '--mamba-version',
+            '-mv',
+            default=False,
+            action='store_true',
+            help='display the version',
+            dest='version'
+        )
+        parser.add_argument(
+            '--slow',
+            '-s',
+            default=0.075,
+            type=float,
+            help='slow test threshold in seconds (default: %(default)s)'
+        )
+        parser.add_argument(
+            '--enable-coverage',
+            default=False,
+            action='store_true',
+            help='enable code coverage measurement (default: %(default)s)'
+        )
+        parser.add_argument(
+            '--coverage-file',
+            default='.coverage',
+            action='store',
+            help='name of coverage data file (default: %(default)s)'
+        )
+        parser.add_argument(
+            '--format',
+            '-f',
+            default='progress',
+            action='store',
+            help='output format (default: %(default)s)'
+        )
+        parser.add_argument(
+            'specs',
+            default=['./spec', './specs'],
+            nargs='*',
+            help='paths to specs to run or directories with specs to run (default: %(default)s)'
+        )
+        parser.add_argument(
+            '--tags',
+            '-t',
+            default=None,
+            type=lambda x: [tag.strip() for tag in x.split(',')],
+            action='store',
+            help='run examples with specified tags (example: -t unit,integration)'
+        )
 
     @classmethod
     def add_arguments(cls, parser):
         # We need to create this method to add Mamba arguments to the Django test command.
         cls.add_mamba_arguments(parser)
-        parser.add_argument('-k', '--keepdb', action='store_true', help='Preserves the test DB between runs.')
+        parser.add_argument(
+            '-k',
+            '--keepdb',
+            action='store_true',
+            help='Preserves the test DB between runs.'
+        )
+
+
+def start_django_transactions():
+    transactions = {}
+
+    for alias in connections:
+        transactions[alias] = transaction.atomic(using=alias)
+        transactions[alias].__enter__()
+
+    return transactions
+
+
+def rollback_django_transactions(transactions):
+    for alias, db_transaction in transactions.items():
+        transaction.set_rollback(True, using=alias)
+        db_transaction.__exit__(None, None, None)
