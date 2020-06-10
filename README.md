@@ -27,7 +27,7 @@ For example:
 
 ## How to execute mamba tests with Django database transactions
 
-```
+```python
 from expects import (
     equal,
     expect
