@@ -1,5 +1,8 @@
 # mamba-django
 
+
+[![PyPI pyversions](https://img.shields.io/badge/python-_3.x-blue.svg)]((https://pypi.python.org/pypi/mamba-django/))
+
 A Django test runner for [mamba](https://github.com/nestorsalceda/mamba).
 
 

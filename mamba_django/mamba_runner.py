@@ -13,6 +13,7 @@ from mamba import (
     application_factory
 )
 
+
 MAMBA_ARGUMENTS = 0
 
 
