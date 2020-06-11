@@ -1,5 +1,6 @@
 import argparse
 
+from django.core.management import call_command
 from django.db import transaction, connections
 from django.test.utils import (
     setup_databases,
@@ -154,3 +155,8 @@ def rollback_django_transactions(transactions):
     for alias, db_transaction in transactions.items():
         transaction.set_rollback(True, using=alias)
         db_transaction.__exit__(None, None, None)
+
+
+def load_fixtures(fixtures):
+    for alias in connections:
+        call_command('loaddata', *fixtures, **{'verbosity': 0, 'database': alias})

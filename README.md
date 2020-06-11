@@ -59,3 +59,38 @@ with description("Mamba with Django") as self:
     with after.each:
         rollback_django_transactions(self.transactions)
 ```
+
+## How to load Django fixtures
+
+You can use the method `load_fixtures` to load [Django fixtures](https://docs.djangoproject.com/en/3.0/ref/django-admin/#what-s-a-fixture).
+
+
+```python
+from expects import (
+    equal,
+    expect
+)
+
+from myapp.mamba_runner import (
+    load_fixtures,
+    start_django_transactions,
+    rollback_django_transactions
+)
+
+from django.contrib.auth.models import Group
+
+
+with description("Mamba with Django") as self:
+
+    with before.each:
+        self.transactions = start_django_transactions()
+        load_fixtures(['group.json'])
+
+    with context("Fixtures"):
+
+        with it("can retrieve loaded fixtures"):
+            expect(Group.objects.all().count()).to(equal(1))
+
+    with after.each:
+        rollback_django_transactions(self.transactions)
+```
