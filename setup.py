@@ -6,7 +6,7 @@ from mamba_django import __version__
 setup(
     name='mamba-django',
     version=__version__,
-    license='GPLv3',
+    license='MIT/X11',
     author='Quique Porta',
     author_email='quiqueporta@gmail.com',
     description='A Django test runner for mamba (the definitive test runner for Python).',
