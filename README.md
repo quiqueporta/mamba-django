@@ -15,19 +15,25 @@ pip install mamba-django
 
 ## How to use
 
-Go to your Django test settings and add this line.
+Go to your Django test settings and add this line
 
 ```
 TEST_RUNNER = 'mamba_django.MambaRunner'
 ```
 
-## How to execute
+and then execute the Django tests
 
 ```
 ./manage.py test --settings=project.settings.test --keepdb
 ```
 
-You can pass all the mamba options to the Django test command.
+or you can execute the tests passing it as parameter
+
+```
+./manage.py test --testrunner mamba_django.MambaRunner --settings=project.settings.test --keepdb
+```
+
+Also, you can pass all the mamba parameters to the Django test command.
 
 For example:
 
