@@ -5,4 +5,4 @@ from .mamba_runner import (
     start_django_transactions
 )
 
-__version__ = '0.4.0'
+__version__ = '0.5.0'

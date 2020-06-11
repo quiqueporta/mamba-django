@@ -11,6 +11,7 @@ setup(
     author_email='quiqueporta@gmail.com',
     description='A Django test runner for mamba (the definitive test runner for Python).',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     url='https://github.com/quiqueporta/mamba-django',
     download_url='https://github.com/quiqueporta/mamba-django/releases',
     keywords=['python', 'bdd', 'testing', 'tdd', 'django'],

@@ -6,12 +6,19 @@
 A Django test runner for [mamba](https://github.com/nestorsalceda/mamba).
 
 
+## How to install
+
+```
+pip install mamba-django
+```
+
+
 ## How to use
 
 Go to your Django test settings and add this line.
 
 ```
-TEST_RUNNER = 'myapp.mamba_runner.MambaRunner'
+TEST_RUNNER = 'mamba_django.MambaRunner'
 ```
 
 ## How to execute
@@ -36,7 +43,7 @@ from expects import (
     expect
 )
 
-from myapp.mamba_runner import (
+from mamba_django import (
     start_django_transactions,
     rollback_django_transactions
 )
@@ -74,7 +81,7 @@ from expects import (
     expect
 )
 
-from myapp.mamba_runner import (
+from mamba_django import (
     load_fixtures,
     start_django_transactions,
     rollback_django_transactions
