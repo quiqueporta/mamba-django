@@ -16,6 +16,9 @@ setup(
     download_url='https://github.com/quiqueporta/mamba-django/releases',
     keywords=['python', 'bdd', 'testing', 'tdd', 'django'],
     packages=['mamba_django'],
+    install_requires=[
+        "Django>=1.11"
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
