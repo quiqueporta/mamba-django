@@ -17,7 +17,8 @@ setup(
     keywords=['python', 'bdd', 'testing', 'tdd', 'django'],
     packages=['mamba_django'],
     install_requires=[
-        "Django>=1.11"
+        "Django>=1.11",
+        "mamba"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
